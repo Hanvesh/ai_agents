@@ -1,0 +1,3 @@
+.*/db/.*/.*.csv
+app/src/main/resources/.*.yml
+db/src/main/resources/.*.yml
