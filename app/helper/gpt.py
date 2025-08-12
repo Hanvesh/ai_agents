@@ -2,7 +2,6 @@ from openai import OpenAI
 import os
 from flask import jsonify
 
-api_key = "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"
 client = OpenAI(api_key=api_key)
 
 def get_chat_completion(prompt):
