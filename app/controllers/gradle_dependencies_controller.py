@@ -23,3 +23,22 @@ def create_gradle_dependency_controller():
 
     dependency_file_path = generate_safe_gradle_dependency(package_name, gradle_version, spring_version)
     return send_file(dependency_file_path, as_attachment=True, download_name=os.path.basename(dependency_file_path))
+
+
+@gradle_vulnerability_bp.route('/analyze-gradle-vulnerabilities', methods=['POST'])
+def analyze_gradle_vulnerabilities_controller():
+    # Expecting a file upload containing build.gradle content
+    if 'file' not in request.files:
+        return jsonify({'error': 'build.gradle file is required'}), 400
+
+    gradle_file = request.files['file']
+    if gradle_file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+
+    # Read the file content
+    build_gradle_content = gradle_file.read().decode('utf-8')
+
+    # Run the vulnerability analysis
+    output_file_path = analyze_gradle_vulnerabilities(build_gradle_content)
+
+    return send_file(output_file_path, as_attachment=True, download_name=os.path.basename(output_file_path))
